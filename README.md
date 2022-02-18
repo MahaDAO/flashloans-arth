@@ -9,4 +9,10 @@ This repository contains information on how to use ARTH's 0% flashloans on Polyg
 
 ## How to create a flashloan?
 
-Check out the [FlashLoanExample.sol](./contracts/FlashLoanExample.sol) for an implementation of how the flash loans work.
+Check out the [FlashLoanExample.sol](./contracts/FlashLoanExample.sol) for an implementation of how the flash loans work. You can deploy the script
+using [deploy-example.ts](./scripts/deploy-example.ts).
+
+```
+# eg: to deploy on the BSC chain
+hardhat run ./scripts/deploy-example.ts --network bsc
+```

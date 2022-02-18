@@ -17,28 +17,27 @@ contract FlashLoanExample is IFlashBorrower {
     }
 
     function onFlashLoan(
-        address initiator,
+        address who,
         uint256 amount,
         uint256 fee,
         bytes calldata data
     ) external override returns (bytes32) {
-        require(
-            msg.sender == address(lender),
-            "FlashBorrower: Untrusted lender"
-        );
-        require(
-            initiator == address(this),
-            "FlashBorrower: Untrusted loan initiator"
-        );
+        require(msg.sender == address(lender), "not lender");
+        require(who == address(this), "not contract");
 
         // Write your logic here
         // make sure that this contract has a balance of (amount + fee) once you're done
         // the (amount + fee) is burnt off for the contract to succeed.
 
+        // Once done, make sure to return this hash to let the lender know it's gone succesfully else the
+        // tx will revert
         return keccak256("FlashMinter.onFlashLoan");
     }
 
-    /// @dev Initiate a flash loan
+    /**
+     * @dev Initiate a flash loan. This is the function that you will actually call
+     * to execute the flashloan
+     */
     function execute(uint256 amount) public {
         // calculate the fee
         uint256 _fee = lender.flashFee(amount);

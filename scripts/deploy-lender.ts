@@ -10,7 +10,7 @@ async function main() {
     `Gas Price: ${ethers.utils.formatUnits(estimateGasPrice, "gwei")} gwei`
   );
 
-  const token = "0xe52509181feb30eb4979e29ec70d50fd5c44d590";
+  const token = "0xB69A424Df8C737a122D0e60695382B3Eec07fF4B";
   const fee = 0;
 
   // Fetch the wallet accounts.

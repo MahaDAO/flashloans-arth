@@ -10,7 +10,7 @@ import "./IFlashBorrower.sol";
 import "./IFlashLender.sol";
 
 interface ERC20MinterBurner is IERC20 {
-    function burnFrom(address from, uint256 amount) external;
+    function burn(address from, uint256 amount) external;
 
     function mint(address from, uint256 amount) external;
 }
@@ -70,7 +70,7 @@ contract FlashMinter is IFlashLender, Pausable, Ownable {
                 CALLBACK_SUCCESS,
             "FlashMinter: Callback failed"
         );
-        token.burnFrom(address(receiver), amount + _fee);
+        token.burn(address(receiver), amount + _fee);
         return true;
     }
 

@@ -30,6 +30,16 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    matic: {
+      url: "----",
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      gasPrice: 100000000000, // 100 gwei
+    },
+    bsc: {
+      url: "https://bsc-dataseed.binance.org/",
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      gasPrice: 100000000000, // 100 gwei
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

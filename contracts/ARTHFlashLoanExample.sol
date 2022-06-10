@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./IFlashBorrower.sol";
 import "./IFlashLender.sol";
 
-contract FlashLoanExample is IFlashBorrower {
+contract ARTHFlashLoanExample is IFlashBorrower {
     IFlashLender public lender;
     IERC20 public token;
 
@@ -31,7 +31,7 @@ contract FlashLoanExample is IFlashBorrower {
 
         // Once done, make sure to return this hash to let the lender know it's gone succesfully else the
         // tx will revert
-        return keccak256("FlashMinter.onFlashLoan");
+        return keccak256("ARTHFlashMinter.onFlashLoan");
     }
 
     /**

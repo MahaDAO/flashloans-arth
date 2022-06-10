@@ -15,27 +15,42 @@ interface ERC20MinterBurner is IERC20 {
     function mint(address from, uint256 amount) external;
 }
 
-contract FlashMinter is IFlashLender, Pausable, Ownable {
+contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
     bytes32 public constant CALLBACK_SUCCESS =
-        keccak256("FlashMinter.onFlashLoan");
+        keccak256("ARTHFlashMinter.onFlashLoan");
 
-    uint256 public fee; //  1 == 0.0001 %.
+    uint256 public fee = 1000; //  1000 == 0.1 %.
     ERC20MinterBurner public token;
+    address public ecosystemFund;
 
     event FeeChanged(uint256 amount);
+    event EcosystemFundChanged(address fund_);
+
+    event FlashloanMint(uint256 amount, address indexed to);
+    event FlashloanPayback(uint256 amount, uint256 fee, address indexed by);
 
     /**
      * @param token_ The token to mint/burn
      * @param fee_ The percentage of the loan `amount` that needs to be repaid, in addition to `amount`.
      */
-    constructor(address token_, uint256 fee_) {
+    constructor(
+        address token_,
+        address fund_,
+        uint256 fee_
+    ) {
         token = ERC20MinterBurner(token_);
-        fee = fee_;
+        setFee(fee_);
+        setEcosystemFund(fund_);
     }
 
-    function setFee(uint256 amount) external onlyOwner {
+    function setFee(uint256 amount) public onlyOwner {
         fee = amount;
         emit FeeChanged(amount);
+    }
+
+    function setEcosystemFund(address fund_) public onlyOwner {
+        ecosystemFund = fund_;
+        emit EcosystemFundChanged(fund_);
     }
 
     function toggle() external onlyOwner {
@@ -64,13 +79,20 @@ contract FlashMinter is IFlashLender, Pausable, Ownable {
         bytes calldata data
     ) external override returns (bool) {
         uint256 _fee = _flashFee(amount);
+
         token.mint(address(receiver), amount);
+        emit FlashloanMint(amount, address(receiver));
+
         require(
             receiver.onFlashLoan(msg.sender, amount, _fee, data) ==
                 CALLBACK_SUCCESS,
-            "FlashMinter: Callback failed"
+            "ARTHFlashMinter: Callback failed"
         );
-        token.burn(address(receiver), amount + _fee);
+
+        token.burn(address(receiver), amount);
+        token.transfer(ecosystemFund, _fee);
+
+        emit FlashloanPayback(amount, _fee, address(receiver));
         return true;
     }
 

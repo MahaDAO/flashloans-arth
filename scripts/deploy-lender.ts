@@ -11,7 +11,7 @@ async function main() {
   );
 
   const token = "0xB69A424Df8C737a122D0e60695382B3Eec07fF4B";
-  const fee = 0;
+  const fee = 1000; // 0.1%
 
   // Fetch the wallet accounts.
   const [operator] = await ethers.getSigners();

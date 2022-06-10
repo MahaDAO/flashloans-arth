@@ -1,6 +1,6 @@
-# ARTH 0% Flashloans
+# ARTH Flashloans
 
-This repository contains information on how to use ARTH's 0% flashloans on Polygon, BSC. Borrow an unlimited amount of ARTH with 0 fees.
+This repository contains information on how to use ARTH's flashloans on Polygon, BSC. Borrow an unlimited amount of ARTH for a fee of 0.1%
 
 | Network             | Deployed Lender Address                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------ |

@@ -17,7 +17,7 @@ async function main() {
   const [operator] = await ethers.getSigners();
 
   // Fetch contract factories.
-  const Factory = await ethers.getContractFactory("FlashLoanExample");
+  const Factory = await ethers.getContractFactory("ARTHFlashLoanExample");
   const contract = await Factory.connect(operator).deploy(lender, token);
 
   console.log(`\n Contract details: `);

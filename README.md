@@ -4,6 +4,7 @@ This repository contains information on how to use ARTH's flashloans on Polygon,
 
 | Network             | Deployed Lender Address                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Ethereum            | [0xc4bBeFDc3066b919cd1A6B5901241E11282e625D](https://etherscan.io/address/0xc4bBeFDc3066b919cd1A6B5901241E11282e625D)    |
 | Polygon             | [0x9A9c25D9e304ddb284e5a36bE0cdEE0a58Ac3C04](https://polygonscan.com/address/0x9A9c25D9e304ddb284e5a36bE0cdEE0a58Ac3C04) |
 | Binance Smart Chain | [0x91aBAa2ae79220f68C0C76Dd558248BA788A71cD](https://bscscan.com/address/0x91aBAa2ae79220f68C0C76Dd558248BA788A71cD)     |
 

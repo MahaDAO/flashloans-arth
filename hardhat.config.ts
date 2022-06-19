@@ -35,6 +35,11 @@ const config: HardhatUserConfig = {
       accounts: [`0x${process.env.PRIVATE_KEY}`],
       gasPrice: 100000000000, // 100 gwei
     },
+    ethereum: {
+      url: "https://mainnet.infura.io/v3/0f8a995bfd6042bfafafb924a04dbdba",
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      // gasPrice: 30000000000, // 30 gwei
+    },
     bsc: {
       url: "https://bsc-dataseed.binance.org/",
       accounts: [`0x${process.env.PRIVATE_KEY}`],

@@ -10,24 +10,31 @@ async function main() {
     `Gas Price: ${ethers.utils.formatUnits(estimateGasPrice, "gwei")} gwei`
   );
 
-  const token = "0xB69A424Df8C737a122D0e60695382B3Eec07fF4B";
+  const governance = "0x6357EDbfE5aDA570005ceB8FAd3139eF5A8863CC";
+  const fund = "0x6bfc9DB28f0A6d11a8d9d64c86026DDD2fad293B";
+  const token = "0x8cc0f052fff7ead7f2edcccac895502e884a8a71";
   const fee = 1000; // 0.1%
 
   // Fetch the wallet accounts.
   const [operator] = await ethers.getSigners();
 
-  // Fetch contract factories.
-  const Factory = await ethers.getContractFactory("FlashMinter");
-  const contract = await Factory.connect(operator).deploy(token, fee);
+  // // Fetch contract factories.
+  // const Factory = await ethers.getContractFactory("ARTHFlashMinter");
+  // const contract = await Factory.connect(operator).deploy(
+  //   token,
+  //   fund,
+  //   governance,
+  //   fee
+  // );
 
-  console.log(`\n Contract details: `);
-  console.log(` - New contract at address(${contract.address})`);
+  // console.log(`\n Contract details: `);
+  // console.log(` - New contract at address(${contract.address})`);
 
-  await contract.deployed();
+  // await contract.deployed();
 
   await hre.run("verify:verify", {
-    address: contract.address,
-    constructorArguments: [token, fee],
+    address: "0xc4bBeFDc3066b919cd1A6B5901241E11282e625D",
+    constructorArguments: [token, fund, governance, fee],
   });
 }
 

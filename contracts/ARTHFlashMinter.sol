@@ -12,7 +12,7 @@ import "./IFlashLender.sol";
 interface ERC20MinterBurner is IERC20 {
     function burn(address from, uint256 amount) external;
 
-    function mint(address from, uint256 amount) external;
+    function mint(address to, uint256 amount) external;
 }
 
 contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
@@ -36,11 +36,14 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
     constructor(
         address token_,
         address fund_,
+        address governance_,
         uint256 fee_
     ) {
         token = ERC20MinterBurner(token_);
         setFee(fee_);
         setEcosystemFund(fund_);
+
+        _transferOwnership(governance_);
     }
 
     function setFee(uint256 amount) public onlyOwner {

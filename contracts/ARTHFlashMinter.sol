@@ -14,47 +14,59 @@ interface ERC20MinterBurner is IERC20 {
     function mint(address to, uint256 amount) external;
 }
 
+/// @title A flash loan contract for minting/burning a large amount of ARTH
+/// @author Steven Enamakel <enamakel@mahadao.com>
 contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
+    /// @notice This is the return value that must be returned by the contract that utilizes the flashloan upon success.
     bytes32 public constant CALLBACK_SUCCESS =
         keccak256("ARTHFlashMinter.onFlashLoan");
 
-    uint256 public fee = 1000; //  1000 == 0.1 %.
-    ERC20MinterBurner public token;
+    /// @notice How much % of the flash loan is charged as fees
+    uint256 public fee = 10000; //  10000 == 1 %.
+
+    /// @notice The ARTH token from which the flashloan contract has permission to mint/burn
+    ERC20MinterBurner public arth;
+
+    /// @notice The address where all flashloan fees will go to
     address public ecosystemFund;
 
     event FeeChanged(uint256 amount);
     event EcosystemFundChanged(address fund_);
-
     event FlashloanMint(uint256 amount, address indexed to);
     event FlashloanPayback(uint256 amount, uint256 fee, address indexed by);
 
     /**
-     * @param token_ The token to mint/burn
-     * @param fee_ The percentage of the loan `amount` that needs to be repaid, in addition to `amount`.
+     * @param arth_ The token to mint/burn
+     * @param fee_ The percentage of the loan `amount` that will be charged as fees
+     * @param fund_ The destination for the flashloan fees
+     * @param governance_ The address which can make changes to the protocol
      */
     constructor(
-        address token_,
+        address arth_,
         address fund_,
-        address governance_,
-        uint256 fee_
+        uint256 fee_,
+        address governance_
     ) {
-        token = ERC20MinterBurner(token_);
-        setFee(fee_);
-        setEcosystemFund(fund_);
-
+        arth = ERC20MinterBurner(arth_);
+        setEcosystemFund(fund_, fee_);
         _transferOwnership(governance_);
     }
 
-    function setFee(uint256 amount) public onlyOwner {
+    /**
+     * @dev Sets the ecosystem fund and fee which recieves all the flashloan revenue. Cah be updated only by governance.
+     * @param fee_ The percentage of the loan `amount` that will be charged as fees
+     * @param fund_ The destination for the flashloan fees
+     */
+    function setEcosystemFund(address fund_, uint256 amount) public onlyOwner {
+        ecosystemFund = fund_;
         fee = amount;
         emit FeeChanged(amount);
-    }
-
-    function setEcosystemFund(address fund_) public onlyOwner {
-        ecosystemFund = fund_;
         emit EcosystemFundChanged(fund_);
     }
 
+    /**
+     * @dev Pause/Unpause the flashloan contract. Meant to be called by governance.
+     */
     function toggle() external onlyOwner {
         if (paused()) _unpause();
         else _pause();
@@ -82,7 +94,7 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
     ) external override returns (bool) {
         uint256 _fee = _flashFee(amount);
 
-        token.mint(address(receiver), amount);
+        arth.mint(address(receiver), amount);
         emit FlashloanMint(amount, address(receiver));
 
         require(
@@ -91,8 +103,8 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
             "ARTHFlashMinter: Callback failed"
         );
 
-        token.burn(address(receiver), amount);
-        token.transfer(ecosystemFund, _fee);
+        arth.burn(address(receiver), amount);
+        arth.transfer(ecosystemFund, _fee);
 
         emit FlashloanPayback(amount, _fee, address(receiver));
         return true;
@@ -101,9 +113,9 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
     /**
      * @dev The fee to be charged for a given loan. Internal function with no checks.
      * @param amount The amount of tokens lent.
-     * @return The amount of `token` to be charged for the loan, on top of the returned principal.
+     * @return ret The amount of `token` to be charged for the loan, on top of the returned principal.
      */
-    function _flashFee(uint256 amount) internal view returns (uint256) {
-        return (amount * fee) / 10000;
+    function _flashFee(uint256 amount) internal view returns (uint256 ret) {
+        ret = (amount * fee) / 10000;
     }
 }

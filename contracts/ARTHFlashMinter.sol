@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
 
-import "./IFlashBorrower.sol";
-import "./IFlashLender.sol";
+import {IFlashBorrower} from "./IFlashBorrower.sol";
+import {IFlashLender} from "./IFlashLender.sol";
 
 interface ERC20MinterBurner is IERC20 {
     function burn(address from, uint256 amount) external;

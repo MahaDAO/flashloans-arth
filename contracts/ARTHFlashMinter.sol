@@ -57,10 +57,10 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
      * @param fee_ The percentage of the loan `amount` that will be charged as fees
      * @param fund_ The destination for the flashloan fees
      */
-    function setEcosystemFund(address fund_, uint256 amount) public onlyOwner {
+    function setEcosystemFund(address fund_, uint256 fee_) public onlyOwner {
         ecosystemFund = fund_;
-        fee = amount;
-        emit FeeChanged(amount);
+        fee = fee_;
+        emit FeeChanged(fee_);
         emit EcosystemFundChanged(fund_);
     }
 

@@ -104,7 +104,7 @@ contract ARTHFlashMinter is IFlashLender, Pausable, Ownable {
         );
 
         arth.burn(address(receiver), amount);
-        arth.transfer(ecosystemFund, _fee);
+        arth.transferFrom(address(receiver), ecosystemFund, _fee);
 
         emit FlashloanPayback(amount, _fee, address(receiver));
         return true;
